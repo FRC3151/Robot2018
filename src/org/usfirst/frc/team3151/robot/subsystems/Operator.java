@@ -1,47 +1,47 @@
 package org.usfirst.frc.team3151.robot.subsystems;
 
-import org.usfirst.frc.team3151.robot.Constants;
+import org.usfirst.frc.team3151.robot.DeadzoneUtils;
 import org.usfirst.frc.team3151.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 public class Operator {
 
-	public double getLift() {
+	public Lift.State desiredLift() {
 		if (RobotMap.operator.getYButton()) {
-			return Constants.LIFT_UP_POWER;
+			return Lift.State.UP;
+		} else if (RobotMap.operator.getXButton()) {
+			return Lift.State.HOLD_EMPTY;
+		} else if (RobotMap.operator.getBButton()) {
+			return Lift.State.HOLD_CUBE;
 		} else if (RobotMap.operator.getAButton()) {
-			return Constants.LIFT_DOWN_POWER;
+			return Lift.State.DOWN;
 		} else {
-			return 0.0;
+			return Lift.State.IDLE;
 		}
 	}
 	
-	public double getGripper() {
-		return deadzone(RobotMap.operator.getY(Hand.kRight), 0.1) / 3;
-	}
-	
-	public double getClimber() {
-		return deadzone(RobotMap.operator.getY(Hand.kLeft), 0.1);
-	}
-	
-	public double deadzone(double value, double deadband) {
-		if (Math.abs(value) > deadband) {
-			if (value > 0.0) {
-				return (value - deadband) / (1.0 - deadband);
-			} else {	
-				return (value + deadband) / (1.0 - deadband);
-			}
-	    } else {
-			return 0.0;
+	public Gripper.State desiredGripper() {
+		if (RobotMap.operator.getBumper(Hand.kRight)) {
+			return Gripper.State.OPEN;
+		} else if (RobotMap.operator.getTriggerAxis(Hand.kLeft) > 0.1) {
+			return Gripper.State.HOLD_CUBE;
+		} else if (RobotMap.operator.getBumper(Hand.kLeft)) {
+			return Gripper.State.CLOSE;
+		} else {
+			return Gripper.State.IDLE;
 		}
 	}
 	
-	public boolean getSpecialLed1() {
+	public double climberPower() {
+		return DeadzoneUtils.deadzone(RobotMap.operator.getY(Hand.kLeft), 0.1);
+	}
+	
+	public boolean specialLed1() {
 		return RobotMap.operator.getBackButton();
 	}
 	
-	public boolean getSpecialLed2() {
+	public boolean specialLed2() {
 		return RobotMap.operator.getStartButton();
 	}
 	

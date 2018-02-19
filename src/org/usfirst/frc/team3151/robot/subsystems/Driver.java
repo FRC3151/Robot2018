@@ -1,27 +1,82 @@
 package org.usfirst.frc.team3151.robot.subsystems;
 
-import org.usfirst.frc.team3151.robot.Constants;
+import org.usfirst.frc.team3151.robot.DeadzoneUtils;
 import org.usfirst.frc.team3151.robot.RobotMap;
 
 public class Driver {
 	
-	public double getSpeed() {
-		return -RobotMap.driver.getY() * getModifier();
+	private DriveMode mode = DriveMode.FIELD_RUN;
+	
+	public double speed() {
+		double raw = RobotMap.driver.getY();
+		double deadzoned = DeadzoneUtils.deadzone(raw, 0.04);
+		double limited = deadzoned * mode.getSpeedMult();
+		
+		// negate the entire thing because joysticks have -1 at the top and +1 at the bottom
+		return -limited;
 	}
 	
-	public double getRotation() {
-		return RobotMap.driver.getX();
+	public double rotation() {
+		// what we limit this by depends on if we're in quick turn or not
+		double limitBy = quickTurn() ? mode.getQuickTurnRotationMult() : mode.getNormalRotationMult();
+		
+		double raw = RobotMap.driver.getX();
+		double deadzoned = DeadzoneUtils.deadzone(raw, 0.04);
+		double limited = deadzoned * limitBy;
+		
+		return limited; 
 	}
 	
 	public boolean quickTurn() {
 		return RobotMap.driver.getTrigger();
 	}
 	
-	public double getModifier() {
-		// Cap speed controller input to compensate for weight of robot not allowing robot to move at lower inputs.
-		double rawModifier = (-RobotMap.driver.getZ() + 1) / 2.0D;
-		double modifier = Constants.MINIMUM_DRIVE_SPEED_MODIFIER + (rawModifier * (1.0D - Constants.MINIMUM_DRIVE_SPEED_MODIFIER));
-		return modifier;
+	public boolean portalIntent() {
+		return RobotMap.driver.getTop();
+	}
+	
+	public void updateDriveMode() {
+		if (RobotMap.driver.getRawButton(4)) {
+			mode = DriveMode.FIELD_RUN;
+		} else if (RobotMap.driver.getRawButton(5)) {
+			mode = DriveMode.MANIPULATE_CUBE;
+		} else if (RobotMap.driver.getRawButton(6)) {
+			mode = DriveMode.MAX_OUTPUT;
+		}
+	}
+	
+	public DriveMode getDriveMode() {
+		return mode;
+	}
+	
+	public enum DriveMode {
+		
+		MAX_OUTPUT(1, 1, 1),
+		FIELD_RUN(1, 1, 0.3),
+		MANIPULATE_CUBE(0.5, 1, 0.3);
+		
+		private double speedMult;
+		private double normalRotationMult;
+		private double quickTurnRotationMult;
+		
+		DriveMode(double speedMult, double normalRotationMult, double quickTurnRotationMult) {
+			this.speedMult = speedMult;
+			this.normalRotationMult = normalRotationMult;
+			this.quickTurnRotationMult = quickTurnRotationMult;
+		}
+		
+		public double getSpeedMult() {
+			return speedMult;
+		}
+		
+		public double getNormalRotationMult() {
+			return normalRotationMult;
+		}
+		
+		public double getQuickTurnRotationMult() {
+			return quickTurnRotationMult;
+		}
+		
 	}
 	
 }
