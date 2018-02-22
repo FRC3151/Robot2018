@@ -36,15 +36,17 @@ public class FieldConfig {
 	
 	public enum Alliance {
 
-		RED(Color.RED, Color.RED_BEATING),
-		BLUE(Color.BLUE, Color.BLUE_BEATING);
+		RED(Color.RED, Color.RED_BEATING, Color.ORANGE),
+		BLUE(Color.BLUE, Color.BLUE_BEATING, Color.LIGHT_GREEN);
 
 		private Color mainColor;
 		private Color beatingColor;
+		private Color warningColor;
 		
-	    Alliance(Color mainColor, Color beatingColor) {
+	    Alliance(Color mainColor, Color beatingColor, Color warningColor) {
 	    	this.mainColor = mainColor;
 	    	this.beatingColor = beatingColor;
+	    	this.warningColor = warningColor;
 		}
 
 		public Color getMainColor() {
@@ -53,6 +55,10 @@ public class FieldConfig {
 		
 		public Color getBeatingColor() {
 		    return beatingColor;
+		}
+		
+		public Color getWarningColor() {
+			return warningColor;
 		}
 		
 	}

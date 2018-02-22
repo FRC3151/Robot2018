@@ -59,8 +59,8 @@ public class LedStrip {
 			return Color.SINELON;
 		} else if (driver.portalIntent()) {
 			return Color.GREEN;
-		} else if (timeLeft < 40 && timeLeft % 5 == 0) {
-			return Color.YELLOW;
+		} else if (timeLeft <= 40 && timeLeft % 5 == 0) {
+			return fieldConfig.getAlliance().getWarningColor();
 		} else if (driver.getDriveMode() == DriveMode.MANIPULATE_CUBE) {
 			return fieldConfig.getAlliance().getBeatingColor();
 		} else {
@@ -75,6 +75,8 @@ public class LedStrip {
 		RED_BEATING(0.07),
 		BLUE(0.85),
 		BLUE_BEATING(0.27),
+		ORANGE(0.65),
+		LIGHT_GREEN(0.73),
 		GREEN(0.77),
 		YELLOW(0.69),
 		WHITE(0.93),

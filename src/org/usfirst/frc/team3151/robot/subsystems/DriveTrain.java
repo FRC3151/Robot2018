@@ -3,7 +3,6 @@ package org.usfirst.frc.team3151.robot.subsystems;
 import org.usfirst.frc.team3151.robot.RobotMap;
 import org.usfirst.frc.team3151.robot.auto.AutoConstants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.interfaces.Gyro;

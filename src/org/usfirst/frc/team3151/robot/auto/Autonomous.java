@@ -14,7 +14,8 @@ public class Autonomous {
 	private Lift lift;
 	private Gripper gripper;
 
-	private AutoMode runningMode = AutoMode.IDLE;
+	//private AutoMode runningMode = AutoMode.POS_3_SWITCH_LEFT;
+	private AutoMode runningMode = AutoMode.POS_5_SCALE_NEAR;
 	private TankModifier tank;
 	
 	private long startedPath = 0;
@@ -59,14 +60,12 @@ public class Autonomous {
 			lift.set(Lift.State.HOLD_CUBE);
 		}
 		
-		// if we're just going to the line or still running the path hold,
-		// otherwise open for the first Xms of being done and then no power
-		if (target == Target.LINE || finishedAgo == 0) {
-			gripper.set(Gripper.State.HOLD_CUBE);
+		if (finishedPath == 0) {
+			//gripper.set(Gripper.State.CLOSE);
 		} else if (finishedAgo < AutoConstants.RELEASE_TIME) {
-			gripper.set(Gripper.State.OPEN);
+			//gripper.set(Gripper.State.OPEN);
 		} else {
-			gripper.set(Gripper.State.IDLE);
+			//gripper.set(Gripper.State.IDLE);
 		}
 	}
 
@@ -77,8 +76,8 @@ public class Autonomous {
 	public enum Target {
 		
 		LINE(500),
-		SWITCH(1500),
-		SCALE(3500);
+		SWITCH(2_000),
+		SCALE(5_000);
 		
 		private long liftRaiseTime;
 		

@@ -24,8 +24,6 @@ public class Operator {
 	public Gripper.State desiredGripper() {
 		if (RobotMap.operator.getBumper(Hand.kRight)) {
 			return Gripper.State.OPEN;
-		} else if (RobotMap.operator.getTriggerAxis(Hand.kLeft) > 0.1) {
-			return Gripper.State.HOLD_CUBE;
 		} else if (RobotMap.operator.getBumper(Hand.kLeft)) {
 			return Gripper.State.CLOSE;
 		} else {

@@ -7,6 +7,7 @@ public enum AutoMode {
 	
 	// nothing
 	IDLE(new Waypoint[] {
+	    new Waypoint(0, 0, 0),
 	    new Waypoint(0, 0, 0)
 	}, Autonomous.Target.LINE),
 	

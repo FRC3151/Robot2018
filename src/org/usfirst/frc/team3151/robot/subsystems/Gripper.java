@@ -12,9 +12,8 @@ public class Gripper {
 	
 	public enum State {
 		
-		OPEN(0.2),
-		HOLD_CUBE(-0.1),
-		CLOSE(-0.2),
+		OPEN(-0.3),
+		CLOSE(0.4),
 		IDLE(0);
 		
 		private double power;

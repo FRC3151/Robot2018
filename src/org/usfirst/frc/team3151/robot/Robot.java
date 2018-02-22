@@ -60,8 +60,7 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void robotPeriodic() {
-		System.out.printf("L: %.2fft (%.2ffs/s)    R: %.2fft (%.2fft/s) %n", driveTrain.getLeftPosition(), driveTrain.getLeftVelocity(), driveTrain.getRightPosition(), driveTrain.getRightVelocity());
-		System.out.printf("TCD: %.1fA, Accel: x=%.2fG, y=%.2fG, z=%.2fG %n", pdp.getTotalCurrent(), accel.getX(), accel.getY(), accel.getZ());
+		System.out.printf("L: %.2fft (%.2ffs/s)    R: %.2fft (%.2fft/s)     TCD: %.1fA %n", driveTrain.getLeftPosition(), driveTrain.getLeftVelocity(), driveTrain.getRightPosition(), driveTrain.getRightVelocity(), pdp.getTotalCurrent());
 		ledStrip.updateLedOutput();
 	}
 	

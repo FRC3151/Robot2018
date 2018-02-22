@@ -18,7 +18,7 @@ public class Driver {
 	
 	public double rotation() {
 		// what we limit this by depends on if we're in quick turn or not
-		double limitBy = quickTurn() ? mode.getQuickTurnRotationMult() : mode.getNormalRotationMult();
+		double limitBy = mode.getNormalRotationMult();
 		
 		double raw = RobotMap.driver.getX();
 		double deadzoned = DeadzoneUtils.deadzone(raw, 0.04);
@@ -32,13 +32,13 @@ public class Driver {
 	}
 	
 	public boolean portalIntent() {
-		return RobotMap.driver.getTop();
+		return RobotMap.driver.getRawButton(2);
 	}
 	
 	public void updateDriveMode() {
-		if (RobotMap.driver.getRawButton(4)) {
+		if (RobotMap.driver.getRawButton(11)) {
 			mode = DriveMode.FIELD_RUN;
-		} else if (RobotMap.driver.getRawButton(5)) {
+		} else if (RobotMap.driver.getRawButton(10)) {
 			mode = DriveMode.MANIPULATE_CUBE;
 		} else if (RobotMap.driver.getRawButton(6)) {
 			mode = DriveMode.MAX_OUTPUT;
@@ -51,18 +51,16 @@ public class Driver {
 	
 	public enum DriveMode {
 		
-		MAX_OUTPUT(1, 1, 1),
-		FIELD_RUN(1, 1, 0.3),
-		MANIPULATE_CUBE(0.5, 1, 0.3);
+		MAX_OUTPUT(1, 1),
+		FIELD_RUN(1, 0.8),
+		MANIPULATE_CUBE(0.5, 0.8);
 		
 		private double speedMult;
 		private double normalRotationMult;
-		private double quickTurnRotationMult;
 		
-		DriveMode(double speedMult, double normalRotationMult, double quickTurnRotationMult) {
+		DriveMode(double speedMult, double normalRotationMult) {
 			this.speedMult = speedMult;
 			this.normalRotationMult = normalRotationMult;
-			this.quickTurnRotationMult = quickTurnRotationMult;
 		}
 		
 		public double getSpeedMult() {
@@ -71,10 +69,6 @@ public class Driver {
 		
 		public double getNormalRotationMult() {
 			return normalRotationMult;
-		}
-		
-		public double getQuickTurnRotationMult() {
-			return quickTurnRotationMult;
 		}
 		
 	}
