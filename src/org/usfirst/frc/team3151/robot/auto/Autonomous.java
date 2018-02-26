@@ -12,8 +12,6 @@ public class Autonomous {
 	
 	private DriveTrain driveTrain;
 	private Lift lift;
-	private Gripper gripper;
-
 	//private AutoMode runningMode = AutoMode.POS_3_SWITCH_LEFT;
 	private AutoMode runningMode = AutoMode.POS_5_SCALE_NEAR;
 	private TankModifier tank;
@@ -24,8 +22,6 @@ public class Autonomous {
 	public Autonomous(DriveTrain driveTrain, Lift lift, Gripper gripper) {
 		this.driveTrain = driveTrain;
 		this.lift = lift;
-		this.gripper = gripper;
-		
 		Trajectory testPath = Pathfinder.generate(runningMode.getPath(), new Trajectory.Config(
 			Trajectory.FitMethod.HERMITE_CUBIC,
 			Trajectory.Config.SAMPLES_HIGH,
