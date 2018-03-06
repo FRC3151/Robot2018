@@ -48,9 +48,12 @@ public enum AutoMode {
 	POS_1_SCALE_FAR(new Waypoint[] {
 	    AutoConstants.POS_1_START,
 	    new Waypoint(16.00, AutoConstants.POS_1_START_Y, 0),
-	    new Waypoint(20.00, 17.00, Pathfinder.d2r(-90)),
-	    new Waypoint(20.00, 10.00, Pathfinder.d2r(-90)),
-	    new Waypoint(23.00, 5.00, 0),
+	    new Waypoint(19.00, 22.00, Pathfinder.d2r(-65)),
+	    new Waypoint(19.00, 21.00, Pathfinder.d2r(-90)),
+	    new Waypoint(19.00, 7.00,  Pathfinder.d2r(-90)),
+	    new Waypoint(19.00, 5.00,  Pathfinder.d2r(-70)),
+	    new Waypoint(23.00, 3.00,  Pathfinder.d2r(0.0)),
+	    new Waypoint(25.00, 5.00,  Pathfinder.d2r(60)),
 	    AutoConstants.SCALE_RIGHT
 	}, Autonomous.Target.SCALE),
 	
