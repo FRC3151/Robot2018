@@ -6,26 +6,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Gripper {
 
-	public void set(State state) {
-		RobotMap.gripper.set(ControlMode.PercentOutput, state.getPower());
+	public void intake(double left, double right) {
+		RobotMap.intakeLeft.set(ControlMode.PercentOutput, left);
+		RobotMap.intakeRight.set(ControlMode.PercentOutput, right);
 	}
 	
-	public enum State {
-		
-		OPEN(-0.3),
-		CLOSE(0.4),
-		IDLE(0);
-		
-		private double power;
-		
-		State(double power) {
-			this.power = power;
-		}
-		
-		public double getPower() {
-			return power;
-		}
-		
+	public void eject() {
+		intake(-1, -1);
 	}
 	
 }

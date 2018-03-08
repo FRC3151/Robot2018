@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 public class CameraController {
 	
    public void setupStream() {
-        VideoCamera camera = CameraServer.getInstance().startAutomaticCapture("Tower", "/dev/video0");
+        VideoCamera camera = CameraServer.getInstance().startAutomaticCapture("Gripper", "/dev/video0");
         camera.setResolution(640, 480);
     }
    

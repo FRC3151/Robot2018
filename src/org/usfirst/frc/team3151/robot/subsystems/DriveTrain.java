@@ -13,6 +13,9 @@ import jaci.pathfinder.followers.EncoderFollower;
 public class DriveTrain {
 
 	private Gyro gyro;
+	private long startedEncoderPath;
+	private long finishedEncoderPath;
+	
 	private EncoderFollower leftFollower;
 	private EncoderFollower rightFollower;
 	
@@ -22,13 +25,15 @@ public class DriveTrain {
 	
 	public void initEncoderPath(Trajectory left, Trajectory right) {
 		gyro.reset();
+		startedEncoderPath = 0;
+		finishedEncoderPath = 0;
 		
 		leftFollower = new EncoderFollower(left);
-		leftFollower.configurePIDVA(AutoConstants.DRIVE_P, 0, 0, 1 / AutoConstants.MAX_VELOCITY, 0);
+		leftFollower.configurePIDVA(AutoConstants.DRIVE_TRAIN_P, 0, 0, 1 / AutoConstants.MAX_VELOCITY, 0);
 		leftFollower.configureEncoder(RobotMap.leftMaster.getSelectedSensorPosition(0), 4096, AutoConstants.WHEEL_DIAMETER);
 		
 		rightFollower = new EncoderFollower(right);
-		rightFollower.configurePIDVA(AutoConstants.DRIVE_P, 0, 0, 1 / AutoConstants.MAX_VELOCITY, 0);
+		rightFollower.configurePIDVA(AutoConstants.DRIVE_TRAIN_P, 0, 0, 1 / AutoConstants.MAX_VELOCITY, 0);
 		rightFollower.configureEncoder(RobotMap.rightMaster.getSelectedSensorPosition(0), 4096, AutoConstants.WHEEL_DIAMETER);
 	}
 	
@@ -40,18 +45,44 @@ public class DriveTrain {
 		RobotMap.robotDrive.tankDrive(left, right, false);
 	}
 	
-	public boolean driveEncoderPath() {
+	public void driveEncoderPath() {
+		if (startedEncoderPath == 0) {
+			startedEncoderPath = System.currentTimeMillis();
+		}
+		
 		double leftOutput = leftFollower.calculate(RobotMap.leftMaster.getSelectedSensorPosition(0));
 		double rightOutput = rightFollower.calculate(RobotMap.rightMaster.getSelectedSensorPosition(0));
 		
 		double actualHeading = gyro.getAngle();
 		double desiredHeading = Pathfinder.r2d(leftFollower.getHeading());
 		double errorHeading = Pathfinder.boundHalfDegrees(desiredHeading - actualHeading);
-		double turn = AutoConstants.HEADING_CORRECTION_P * errorHeading;
+		double turn = AutoConstants.GYRO_P * errorHeading;
 
-		System.out.println("offset: " + errorHeading + ", turn: " + turn);
 		driveTank(leftOutput - turn, rightOutput + turn);
-		return leftFollower.isFinished();
+		
+		if (leftFollower.isFinished() && finishedEncoderPath == 0) {
+			finishedEncoderPath = System.currentTimeMillis();
+		}
+	}
+	
+	// returns how long ago the drivetrain started following the path (in ms),
+	// or -1 if it hasn't started
+	public long getStartedEncoderPathAgo() {
+		if (startedEncoderPath == 0) {
+			 return -1;
+		} else {
+			return System.currentTimeMillis() - startedEncoderPath;
+		}
+	}
+	
+	// returns how long ago the drivetrain finished following the path (in ms),
+	// or -1 if it hasn't finished
+	public long getFinishedEncoderPathAgo() {
+		if (finishedEncoderPath == 0) {
+			 return -1;
+		} else {
+			return System.currentTimeMillis() - finishedEncoderPath;
+		}
 	}
 	
 	public double getLeftPosition() {

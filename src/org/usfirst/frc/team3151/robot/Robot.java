@@ -1,11 +1,8 @@
 package org.usfirst.frc.team3151.robot;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 
 import org.usfirst.frc.team3151.robot.auto.Autonomous;
 import org.usfirst.frc.team3151.robot.subsystems.CameraController;
@@ -39,10 +36,6 @@ public class Robot extends TimedRobot {
 	private Autonomous autonomous = new Autonomous(driveTrain, lift, gripper);
 	private LedStrip ledStrip = new LedStrip(fieldConfig, autonomous, driver, operator);
 	
-	// Debug
-	private PowerDistributionPanel pdp = new PowerDistributionPanel(0);
-	private BuiltInAccelerometer accel = new BuiltInAccelerometer(Range.k4G);
-	
 	@Override
 	public void robotInit() {
 		cameraController.printConnectedCameras();
@@ -50,18 +43,22 @@ public class Robot extends TimedRobot {
 	}
 	
 	@Override
+	public void robotPeriodic() {
+		ledStrip.updateLedOutput();
+	}
+	
+	@Override
 	public void teleopPeriodic() {
 		driver.updateDriveMode();
 		driveTrain.driveCurvature(driver.speed(), driver.rotation(), driver.quickTurn());
 		lift.set(operator.desiredLift());
-		gripper.set(operator.desiredGripper());
 		climber.setPower(operator.climberPower());
-	}
-	
-	@Override
-	public void robotPeriodic() {
-		System.out.printf("L: %.2fft (%.2ffs/s)    R: %.2fft (%.2fft/s)     TCD: %.1fA %n", driveTrain.getLeftPosition(), driveTrain.getLeftVelocity(), driveTrain.getRightPosition(), driveTrain.getRightVelocity(), pdp.getTotalCurrent());
-		ledStrip.updateLedOutput();
+		
+		if (operator.intakeEject()) {
+			gripper.eject();
+		} else {
+			gripper.intake(operator.intakeLeft(), operator.intakeRight());
+		}
 	}
 	
 	@Override

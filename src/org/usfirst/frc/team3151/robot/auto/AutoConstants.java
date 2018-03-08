@@ -28,10 +28,7 @@ public class AutoConstants {
 	public static double WHEEL_DIAMETER = 0.482; // Effective wheel diameter (in ft)
 	public static double WHEEL_BASE_WIDTH = 3.5; // Effective distance between wheels (in ft)
 	
-	public static double HEADING_CORRECTION_P = -0.05;
-	
-	public static double DRIVE_P = 0.25;
-	
-	public static long RELEASE_TIME = 500;
+	public static double DRIVE_TRAIN_P = 0.25;
+	public static double GYRO_P = -0.05;
 	
 }

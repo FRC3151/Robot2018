@@ -61,7 +61,7 @@ public class LedStrip {
 			return Color.GREEN;
 		} else if (timeLeft <= 40 && timeLeft % 5 == 0) {
 			return fieldConfig.getAlliance().getWarningColor();
-		} else if (driver.getDriveMode() == DriveMode.MANIPULATE_CUBE) {
+		} else if (operator.desiredLift() != Lift.State.IDLE) {
 			return fieldConfig.getAlliance().getBeatingColor();
 		} else {
 			return fieldConfig.getAlliance().getMainColor();

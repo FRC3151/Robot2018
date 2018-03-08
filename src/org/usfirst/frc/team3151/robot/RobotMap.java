@@ -29,7 +29,8 @@ public class RobotMap {
 	public static WPI_TalonSRX climber = createTalon(7, NeutralMode.Brake);
 	public static WPI_TalonSRX climberFollower = createTalon(8, NeutralMode.Brake);
 	
-	public static WPI_TalonSRX gripper = createTalon(2, NeutralMode.Coast);
+	public static WPI_TalonSRX intakeLeft = createTalon(2, NeutralMode.Coast);
+	public static WPI_TalonSRX intakeRight = createTalon(1, NeutralMode.Coast);
 	
 	// Misc
 	public static Spark revBlinkin = new Spark(0);
@@ -44,6 +45,9 @@ public class RobotMap {
 		rightFollower.follow(rightMaster);
 		liftFollower.follow(lift);
 		climberFollower.follow(climber);
+
+		// because of how the motors are placed we need to invert one side of the robot
+		intakeRight.setInverted(true);
 		
 		// we do deadband on our own in our Driver class
 		robotDrive.setDeadband(0);
