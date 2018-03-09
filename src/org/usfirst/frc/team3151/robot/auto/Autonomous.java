@@ -1,6 +1,8 @@
 package org.usfirst.frc.team3151.robot.auto;
 
 import org.usfirst.frc.team3151.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3151.robot.subsystems.FieldConfig;
+import org.usfirst.frc.team3151.robot.subsystems.FieldConfig.Side;
 import org.usfirst.frc.team3151.robot.subsystems.Gripper;
 import org.usfirst.frc.team3151.robot.subsystems.Lift;
 
@@ -11,13 +13,15 @@ public class Autonomous {
 	private DriveTrain driveTrain;
 	private Lift lift;
 	private Gripper gripper;
+	private FieldConfig fieldConfig;
 	
-	private AutoMode runningMode = AutoMode.POS_1_SCALE;
+	private AutoPath runningPath;
 	
-	public Autonomous(DriveTrain driveTrain, Lift lift, Gripper gripper) {
+	public Autonomous(DriveTrain driveTrain, Lift lift, Gripper gripper, FieldConfig fieldConfig) {
 		this.driveTrain = driveTrain;
 		this.lift = lift;
 		this.gripper = gripper;
+		this.fieldConfig = fieldConfig;
 		
 		SmartDashboard.putStringArray("Auto List", new String[] {
 			"Idle",
@@ -31,29 +35,107 @@ public class Autonomous {
 			"5 Scale"
 		});
 		
-		for (AutoMode mode : AutoMode.values()) {
+		// either generate + save or load all of our possible paths
+		for (AutoPath mode : AutoPath.values()) {
 			mode.loadOrGenPath();
 		}
 	}
 	
 	public void autonomousInit() {
 		String mode = SmartDashboard.getString("Auto Selector", "Line");
-		System.out.println(mode);
-		driveTrain.initEncoderPath(runningMode.getLeftPath(), runningMode.getRightPath());
+		Side switchSide = fieldConfig.getSwitchSide();
+		Side scaleSide = fieldConfig.getScaleSide();
+		
+		System.out.println("Running auto mode '" + mode + "'");
+		System.out.println("Switch is on the " + switchSide + ", scale is on the " + scaleSide);
+		
+		switch (mode) {
+			case "Idle":
+				runningPath = AutoPath.IDLE;
+				break;
+			case "Line":
+				runningPath = AutoPath.LINE;
+				break;
+			case "1 Switch":
+				if (switchSide == Side.LEFT) {
+					runningPath = AutoPath.POS_1_SWITCH;
+				} else {
+					runningPath = AutoPath.LINE;
+				}
+				
+				break;
+			case "1 Scale":
+				if (scaleSide == Side.LEFT) {
+					runningPath = AutoPath.POS_1_SCALE;
+				} else if (switchSide == Side.LEFT) {
+					runningPath = AutoPath.POS_1_SWITCH;
+				} else {
+					runningPath = AutoPath.LINE;
+				}
+				
+				break;
+			case "2":
+				if (switchSide == Side.LEFT) {
+					runningPath = AutoPath.POS_2_SWITCH;
+				} else {
+					runningPath = AutoPath.LINE;
+				}
+				
+				break;
+			case "3":
+				if (switchSide == Side.LEFT) {
+					runningPath = AutoPath.POS_3_SWITCH_LEFT;
+				} else {
+					runningPath = AutoPath.POS_3_SWITCH_RIGHT;
+				}
+				
+				break;
+			case "4":
+				if (switchSide == Side.RIGHT) {
+					runningPath = AutoPath.POS_4_SWITCH;
+				} else {
+					runningPath = AutoPath.LINE;
+				}
+				
+				break;
+			case "5 Switch":
+				if (switchSide == Side.RIGHT) {
+					runningPath = AutoPath.POS_5_SWITCH;
+				} else {
+					runningPath = AutoPath.LINE;
+				}
+				
+				break;
+			case "5 Scale":
+				if (scaleSide == Side.RIGHT) {
+					runningPath = AutoPath.POS_5_SCALE;
+				} else if (switchSide == Side.RIGHT) {
+					runningPath = AutoPath.POS_5_SWITCH;
+				} else {
+					runningPath = AutoPath.LINE;
+				}
+				
+				break;
+			default:
+				runningPath = AutoPath.LINE;
+				break;
+		}
+		
+		driveTrain.initEncoderPath(runningPath.getLeftPath(), runningPath.getRightPath());
 	}
 	
 	public void autonomousPeriodic() {
 		driveTrain.driveEncoderPath();
+		
 		long startedAgo = driveTrain.getStartedEncoderPathAgo();
 		long finishedAgo = driveTrain.getFinishedEncoderPathAgo();
-		
-		Target target = runningMode.getTarget();
+		AutoTarget target = runningPath.getTarget();
 		
 		// at the start of auto  e raise based on what our target is and then hold
 		if (startedAgo != -1 && startedAgo < target.getLiftRaiseTime()) {
 			lift.set(Lift.State.UP);
 		} else {
-			lift.set(Lift.State.HOLD_CUBE);
+			lift.set(Lift.State.HOLD);
 		}
 		
 		if (finishedAgo != -1 && finishedAgo < 1_500) {
@@ -63,26 +145,8 @@ public class Autonomous {
 		}
 	}
 
-	public AutoMode getRunningMode() {
-		return runningMode;
-	}
-	 
-	public enum Target {
-		
-		LINE(500),
-		SWITCH(2_000),
-		SCALE(5_000);
-		
-		private long liftRaiseTime;
-		
-		Target(long liftRaiseTime) {
-			this.liftRaiseTime = liftRaiseTime;
-		}
-		
-		public long getLiftRaiseTime() {
-			return liftRaiseTime;
-		}
-		
+	public AutoPath getRunningPath() {
+		return runningPath;
 	}
 	
 }

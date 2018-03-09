@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
 	// Misc
 	private CameraController cameraController = new CameraController();
 	private FieldConfig fieldConfig = new FieldConfig();
-	private Autonomous autonomous = new Autonomous(driveTrain, lift, gripper);
+	private Autonomous autonomous = new Autonomous(driveTrain, lift, gripper, fieldConfig);
 	private LedStrip ledStrip = new LedStrip(fieldConfig, autonomous, driver, operator);
 	
 	@Override

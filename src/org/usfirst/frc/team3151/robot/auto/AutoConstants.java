@@ -28,8 +28,11 @@ public class AutoConstants {
 	public static Waypoint POS_4_START = new Waypoint(STARTING_X, POS_4_START_Y, 0);
 	public static Waypoint POS_5_START = new Waypoint(STARTING_X, POS_5_START_Y, 0);
 	
-	public static Waypoint SWITCH_LEFT = new Waypoint(10.00, 18.00, 0);
-	public static Waypoint SWITCH_RIGHT = new Waypoint(10.00, 9.00, 0);
+	public static Waypoint SWITCH_LEFT_FRONT = new Waypoint(10.50, 18.00, 0);
+	public static Waypoint SWITCH_LEFT_SIDE = new Waypoint(14.00, 19.00, -90);
+	
+	public static Waypoint SWITCH_RIGHT_FRONT = new Waypoint(10.50, 9.00, 0);
+	public static Waypoint SWITCH_RIGHT_SIDE = new Waypoint(14.00, 8.00, 90);
 	
 	public static Waypoint SCALE_LEFT = new Waypoint(24, 20.0, Pathfinder.d2r(-60));
 	public static Waypoint SCALE_RIGHT = new Waypoint(24, 7.00, Pathfinder.d2r(60));

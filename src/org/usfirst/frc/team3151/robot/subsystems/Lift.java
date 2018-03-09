@@ -13,8 +13,7 @@ public class Lift {
 	public enum State {
 		
 		UP(0.5),
-		HOLD_CUBE(0.25),
-		HOLD_EMPTY(0.1),
+		HOLD(0.15),
 		DOWN(-0.3),
 		IDLE(0);
 		

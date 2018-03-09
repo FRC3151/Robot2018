@@ -11,9 +11,7 @@ public class Operator {
 		if (RobotMap.operator.getYButton()) {
 			return Lift.State.UP;
 		} else if (RobotMap.operator.getXButton()) {
-			return Lift.State.HOLD_EMPTY;
-		} else if (RobotMap.operator.getBButton()) {
-			return Lift.State.HOLD_CUBE;
+			return Lift.State.HOLD;
 		} else if (RobotMap.operator.getAButton()) {
 			return Lift.State.DOWN;
 		} else {

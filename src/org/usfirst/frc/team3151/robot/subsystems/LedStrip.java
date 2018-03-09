@@ -1,7 +1,8 @@
 package org.usfirst.frc.team3151.robot.subsystems;
 
 import org.usfirst.frc.team3151.robot.RobotMap;
-import org.usfirst.frc.team3151.robot.auto.AutoMode;
+import org.usfirst.frc.team3151.robot.auto.AutoPath;
+import org.usfirst.frc.team3151.robot.auto.AutoTarget;
 import org.usfirst.frc.team3151.robot.auto.Autonomous;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -34,12 +35,12 @@ public class LedStrip {
 	
 	private Color determineAutoColor() {
 		// auto lights are just based on what our target is
-		AutoMode running = autonomous.getRunningMode();
+		AutoPath running = autonomous.getRunningPath();
 		
 		if (running != null) {
-			if (running.getTarget() == Autonomous.Target.SCALE) {
+			if (running.getTarget() == AutoTarget.SCALE) {
 				return Color.GREEN;
-			} else if (running.getTarget() == Autonomous.Target.SWITCH) {
+			} else if (running.getTarget() == AutoTarget.SWITCH) {
 				return Color.YELLOW;
 			}
 		}
