@@ -21,16 +21,16 @@ public class RobotMap {
 	public static WPI_TalonSRX leftFollower = createTalon(4, NeutralMode.Brake);
 	
 	public static WPI_TalonSRX rightMaster = setupEncoder(createTalon(10, NeutralMode.Brake));
-	public static WPI_TalonSRX rightFollower = createTalon(9, NeutralMode.Brake);
+	public static WPI_TalonSRX rightFollower = createTalon(5, NeutralMode.Brake);
 	
-	public static WPI_TalonSRX lift = createTalon(5, NeutralMode.Brake);
-	public static WPI_TalonSRX liftFollower = createTalon(6, NeutralMode.Brake);
+	public static WPI_TalonSRX lift = createTalon(6, NeutralMode.Brake);
+	public static WPI_TalonSRX liftFollower = createTalon(7, NeutralMode.Brake);
 
-	public static WPI_TalonSRX climber = createTalon(7, NeutralMode.Brake);
-	public static WPI_TalonSRX climberFollower = createTalon(8, NeutralMode.Brake);
+	public static WPI_TalonSRX climber = createTalon(8, NeutralMode.Brake);
+	public static WPI_TalonSRX climberFollower = createTalon(9, NeutralMode.Brake);
 	
 	public static WPI_TalonSRX intakeLeft = createTalon(2, NeutralMode.Coast);
-	public static WPI_TalonSRX intakeRight = createTalon(1, NeutralMode.Coast);
+	public static WPI_TalonSRX intakeRight = createTalon(3, NeutralMode.Coast);
 	
 	// Misc
 	public static Spark revBlinkin = new Spark(0);

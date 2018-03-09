@@ -1,9 +1,19 @@
 package org.usfirst.frc.team3151.robot.auto;
 
 import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 
 public class AutoConstants {
+	
+	public static Trajectory.Config PATHFINDER_CONFIG = new Trajectory.Config(
+		Trajectory.FitMethod.HERMITE_CUBIC,
+		Trajectory.Config.SAMPLES_HIGH,
+		0.02, // loop every 20ms aka 50hz (which is what our robot runs at)
+		5.0, // max desired velocity (ft/s)
+		2.0, // max desired acceleration (ft/s/s)
+		10.0 // max desired jerk (ft/s/s/s)
+	);
 	
 	public static double STARTING_X = 1.583;
 	public static double POS_1_START_Y = 23.00;
@@ -30,5 +40,16 @@ public class AutoConstants {
 	
 	public static double DRIVE_TRAIN_P = 0.25;
 	public static double GYRO_P = -0.05;
+	
+	public static Waypoint[] flipPath(Waypoint[] original) {
+		Waypoint[] flipped = new Waypoint[original.length];
+		
+		for (int i = 0; i < flipped.length; i++) {
+		 	Waypoint copyFrom = original[i];
+			flipped[i] = new Waypoint(copyFrom.x, -copyFrom.y, -copyFrom.angle);
+		}
+		
+		return flipped;
+	}
 	
 }

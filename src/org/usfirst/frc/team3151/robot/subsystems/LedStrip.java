@@ -3,7 +3,6 @@ package org.usfirst.frc.team3151.robot.subsystems;
 import org.usfirst.frc.team3151.robot.RobotMap;
 import org.usfirst.frc.team3151.robot.auto.AutoMode;
 import org.usfirst.frc.team3151.robot.auto.Autonomous;
-import org.usfirst.frc.team3151.robot.subsystems.Driver.DriveMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 

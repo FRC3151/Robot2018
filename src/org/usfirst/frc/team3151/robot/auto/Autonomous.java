@@ -5,10 +5,6 @@ import org.usfirst.frc.team3151.robot.subsystems.Gripper;
 import org.usfirst.frc.team3151.robot.subsystems.Lift;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.modifiers.TankModifier;
 
 public class Autonomous {
 	
@@ -16,15 +12,14 @@ public class Autonomous {
 	private Lift lift;
 	private Gripper gripper;
 	
-	private AutoMode runningMode = AutoMode.POS_5_SCALE;
-	private TankModifier tank;
+	private AutoMode runningMode = AutoMode.POS_1_SCALE;
 	
 	public Autonomous(DriveTrain driveTrain, Lift lift, Gripper gripper) {
 		this.driveTrain = driveTrain;
 		this.lift = lift;
 		this.gripper = gripper;
 		
-		SmartDashboard.putStringArray("Auto Choices", new String[] {
+		SmartDashboard.putStringArray("Auto List", new String[] {
 			"Idle",
 			"Line",
 			"1 Switch",
@@ -36,27 +31,15 @@ public class Autonomous {
 			"5 Scale"
 		});
 		
-		Waypoint[] flippedPath = new Waypoint[runningMode.getPath().length];
-		
-		for (int i = 0; i < flippedPath.length; i++) {
-			Waypoint copyFrom = runningMode.getPath()[i];
-			flippedPath[i] = new Waypoint(copyFrom.x, -copyFrom.y, -copyFrom.angle);
+		for (AutoMode mode : AutoMode.values()) {
+			mode.loadOrGenPath();
 		}
-		
-		Trajectory testPath = Pathfinder.generate(flippedPath, new Trajectory.Config(
-			Trajectory.FitMethod.HERMITE_CUBIC,
-			Trajectory.Config.SAMPLES_HIGH,
-			0.02, // loop every 20ms aka 50hz (which is what our robot runs at)
-			5.0, // max desired velocity (ft/s)
-			2.0, // max desired acceleration (ft/s/s)
-			10.0 // max desired jerk (ft/s/s/s)
-		));
-			
-		tank = new TankModifier(testPath).modify(AutoConstants.WHEEL_BASE_WIDTH);
 	}
 	
 	public void autonomousInit() {
-		driveTrain.initEncoderPath(tank.getLeftTrajectory(), tank.getRightTrajectory());
+		String mode = SmartDashboard.getString("Auto Selector", "Line");
+		System.out.println(mode);
+		driveTrain.initEncoderPath(runningMode.getLeftPath(), runningMode.getRightPath());
 	}
 	
 	public void autonomousPeriodic() {

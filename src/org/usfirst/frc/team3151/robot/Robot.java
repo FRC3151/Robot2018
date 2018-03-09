@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
+import java.text.DecimalFormat;
+
 import org.usfirst.frc.team3151.robot.auto.Autonomous;
 import org.usfirst.frc.team3151.robot.subsystems.CameraController;
 import org.usfirst.frc.team3151.robot.subsystems.Climber;
@@ -38,18 +40,19 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void robotInit() {
-		cameraController.printConnectedCameras();
-		cameraController.setupStream();
+		//cameraController.printConnectedCameras();
+		//cameraController.setupStream();
 	}
 	
 	@Override
 	public void robotPeriodic() {
+		//DecimalFormat df = new DecimalFormat("#.##");
+		//System.out.println("L: " + df.format(driveTrain.getLeftPosition()) + "ft (" + df.format(driveTrain.getLeftVelocity()) + "ft/s) R: " + df.format(driveTrain.getRightPosition()) + "ft (" + df.format(driveTrain.getRightVelocity()) + "ft/s)");
 		ledStrip.updateLedOutput();
 	}
 	
 	@Override
 	public void teleopPeriodic() {
-		driver.updateDriveMode();
 		driveTrain.driveCurvature(driver.speed(), driver.rotation(), driver.quickTurn());
 		lift.set(operator.desiredLift());
 		climber.setPower(operator.climberPower());
